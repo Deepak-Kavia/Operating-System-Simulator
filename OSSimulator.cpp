@@ -441,6 +441,117 @@ class ProcessManagement{
     }
 };
 
+class DiskScheduling{
+    int n;
+    vector<int>disks;
+    public:
+    DiskScheduling(int numOfDisks)
+    {
+        n = numOfDisks;
+    }
+
+    void insertData()
+    {
+        int i = 0 ,invalidInput = 0 ;
+        while(i < n)
+        {   
+            int diskNo;
+            cout << "Enter the disk number which you want to access (Between 0 and 100) : " ;
+            cin >> diskNo;
+
+            if(diskNo < 0 || diskNo > 200)
+            {   
+                if(invalidInput >= 10)
+                {
+                    cout << "You have exhausted your limit of invalid inputs." << endl;
+                    cout << "Operation is terminating . " << endl;
+                    return ;
+                }
+                cout << "Please enter a valid diskNo . " << endl;
+                invalidInput++;
+            }
+            else
+            {
+                disks.push_back(diskNo);
+                invalidInput = 0;
+                i++;
+            }
+
+
+        }
+    }
+
+    void FCFS()
+    {
+        int totalDiskMovements = 0;
+        cout << "Enter the initial position of HeadPointer : ";
+        int initialPosition; 
+        cin >> initialPosition ;
+
+        cout << "The order of accessing the disks is : " ;
+        for(int i = 0 ; i < n ; i++)
+        {
+            cout << disks[i] << " ";
+            totalDiskMovements += abs(initialPosition-disks[i]);
+            initialPosition = disks[i];
+            Sleep(1000);
+        }
+
+        cout << endl;
+        cout << "The total movement of headPointer is : " << totalDiskMovements << endl;
+    }
+
+    void SSTF()
+    {
+        int totalDiskMovements = 0;
+        cout << "Enter the initail position of HeadPointer : ";
+        int initialPosition ;
+        cin >> initialPosition ;
+        vector<int>seeksequence;
+
+        set<int>usedIndex;
+        while(usedIndex.size() != n)
+        {
+            //find minimum for initialPosition
+            int minDiff = INT_MAX , currIndex;
+            sort(disks.begin(),disks.end());
+            for(int i = 0 ; i < n ; i++)
+            {
+                if(abs(initialPosition - disks[i]) <= minDiff && usedIndex.find(i) == usedIndex.end())
+                {
+                    currIndex = i;
+                    minDiff = abs(initialPosition-disks[i]);
+                }
+            }
+
+            seeksequence.push_back(disks[currIndex]);
+            usedIndex.insert(currIndex);
+            totalDiskMovements += minDiff;
+            initialPosition = disks[currIndex];
+        }
+
+        cout << "The order of accessing disks is : " ;
+        for(int i = 0 ; i < n ;i++)
+        {
+            cout << seeksequence[i] << " " ;
+            Sleep(1000);
+        }
+
+        cout << endl;
+        cout << "The total number of disk movements are : " << totalDiskMovements << endl;
+    }
+
+    void SCAN()
+    {
+
+    }
+
+    void LOOK()
+    {
+
+    }
+};
+
 void executeProcessManagement()
 {
     cout << endl << endl << endl << setw(90) << "WELCOME TO THE PROCESS MANAGEMENT SECTION " << endl;
@@ -522,7 +633,44 @@ void executePageReplacement()
 }
 void executeDiskAccessing()
 {
+    cout << endl << endl << endl << setw(90) << "WELCOME TO THE DISK SCHEDULING ALGORITHM SECTION " << endl;
+    cout << "Please Enter the total number of disk request : ";
+    int noOfDisksRequest;
+    cin >> noOfDisksRequest;
 
+    DiskScheduling DS(noOfDisksRequest);
+    DS.insertData();
+    
+    cout << endl << endl << "Select which Algorithm you want to perform : " << endl;
+    cout << "1. First Come First Serve \t\t" ;
+    cout << "2. Shortes Seek Time First \t\t";
+    cout << "3. SCAN Algorithm \t\t";
+    cout << "4. LOOK Algorithm \t\t";
+    cout << endl << "Enter your choice : ";
+
+    start:
+    int choice;
+    cin >> choice;
+    switch(choice)
+    {
+        case 1:  DS.FCFS();
+                break;
+        case 2:  DS.SSTF();
+                break;
+        case 3:  DS.SCAN();
+                break;
+        case 4: DS.LOOK();
+                break;
+        default:    cout << "Wrong Choice Entered."<< endl;
+                    cout << "Press 1 to ReEnter your choice." << endl;
+                    cout << "Press 0 to exit the program." << endl;
+                    int ch;
+                    cin >> ch;
+
+                    if(ch) goto start;
+                    else
+                    exit(0);
+    }            
 }
 int main()
 {
