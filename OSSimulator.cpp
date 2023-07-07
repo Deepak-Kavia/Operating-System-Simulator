@@ -762,6 +762,7 @@ int main()
     cout << setw(130) << "This project demonstrates the working of the various algorithms used in Opearting System for the following tasks : ";
     cout << endl << endl;
 
+    doitAgain:
     cout << setw(65) << "MAIN MENU " << endl;
     cout << setw(76) << "1. Process Management" << endl;
     cout << setw(86) << "2. Page Replacement Algorithms " << endl;
@@ -794,6 +795,20 @@ int main()
                     else
                     exit(0);
                     break;
+    }
+
+    cout << endl;
+    cout << "Do you want to perfom more operations ?" << endl;
+    cout<< "Press Y for YES or N for No :  " << endl;
+    char var ;
+    cin >> var ;
+
+    if(var == 'Y' || var == 'y')
+    goto doitAgain;
+    else
+    {
+        cout << "THANK YOU FOR CHECKING THIS OUT.";
+        exit(0);
     }
     return 0;
 }
