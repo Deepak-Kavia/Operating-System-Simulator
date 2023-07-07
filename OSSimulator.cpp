@@ -514,20 +514,21 @@ class DiskScheduling{
         {
             //find minimum for initialPosition
             int minDiff = INT_MAX , currIndex;
-            sort(disks.begin(),disks.end());
+            vector<int>copy = disks;
+            sort(copy.begin(),copy.end());
             for(int i = 0 ; i < n ; i++)
             {
-                if(abs(initialPosition - disks[i]) <= minDiff && usedIndex.find(i) == usedIndex.end())
+                if(abs(initialPosition - copy[i]) <= minDiff && usedIndex.find(i) == usedIndex.end())
                 {
                     currIndex = i;
-                    minDiff = abs(initialPosition-disks[i]);
+                    minDiff = abs(initialPosition-copy[i]);
                 }
             }
 
-            seeksequence.push_back(disks[currIndex]);
+            seeksequence.push_back(copy[currIndex]);
             usedIndex.insert(currIndex);
             totalDiskMovements += minDiff;
-            initialPosition = disks[currIndex];
+            initialPosition = copy[currIndex];
         }
 
         cout << "The order of accessing disks is : " ;
@@ -543,12 +544,95 @@ class DiskScheduling{
 
     void SCAN()
     {
+        vector<int>copy = disks;
+        sort(copy.begin(),copy.end());
 
+        int totalDiskMovement = 0 , initialHead;
+        cout << "Enter the position of the head : " ;
+        cin >> initialHead;
+        
+        int index = -1;
+        //find the just smaller element then the initial Head Pointer
+        for(int i = 0 ; i < n ; i++)
+        {
+            if(copy[i] <= initialHead)
+            index = i;
+            else
+            break;
+        }
+
+        //now print the order
+        cout << "The order in which disk are accessed is : ";
+        for(int i = index ; i >= 0 ; i--)
+        {
+            cout << copy[i] << " ";
+            totalDiskMovement += abs(initialHead-copy[i]);
+            initialHead = copy[i];
+
+            Sleep(1000);
+        }
+
+        totalDiskMovement += abs(initialHead-0);
+        initialHead = 0;
+        cout << initialHead << " " ;
+        Sleep(1000) ;
+
+        //now print the rest of disks
+        for(int i = index+1 ; i < n ; i++)
+        {
+            cout << copy[i] << " ";
+            totalDiskMovement += abs(initialHead-copy[i]);
+            initialHead = copy[i];
+
+            Sleep(1000);
+        }
+
+        cout << endl;
+        cout << "Total Disk Movements are : " << totalDiskMovement << endl;
     }
 
     void LOOK()
     {
+        vector<int>copy = disks;
+        sort(copy.begin(),copy.end());
 
+        int totalDiskMovement = 0 , initialHead;
+        cout << "Enter the position of the head : " ;
+        cin >> initialHead;
+        
+        int index = -1;
+        //find the just smaller element then the initial Head Pointer
+        for(int i = n-1 ; i >= 0 ; i--)
+        {
+            if(copy[i] >= initialHead)
+            index = i;
+            else
+            break;
+        }
+
+        //now print the order
+        cout << "The order in which disk are accessed is : ";
+        for(int i = index ; i < n ; i++)
+        {
+            cout << copy[i] << " ";
+            totalDiskMovement += abs(initialHead-copy[i]);
+            initialHead = copy[i];
+
+            Sleep(1000);
+        }
+
+        //now print the rest of disks
+        for(int i = index-1 ; i >= 0 ; i--)
+        {
+            cout << copy[i] << " ";
+            totalDiskMovement += abs(initialHead-copy[i]);
+            initialHead = copy[i];
+
+            Sleep(1000);
+        }
+
+        cout << endl;
+        cout << "Total Disk Movements are : " << totalDiskMovement << endl;
     }
 };
 
